@@ -19,7 +19,7 @@ public class server {
 
         //server to client
         PrintWriter pr = new PrintWriter(s.getOutputStream());
-        pr.println("Server response: ");
+        pr.println("Server says - " +str.replace(str,"Don't talk to me"));
         pr.flush();
     }
 
