@@ -2,7 +2,6 @@ import javax.crypto.*;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.nio.charset.StandardCharsets;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -25,18 +24,15 @@ public class server {
         System.out.println("Received HMAC digest: " +readHmacDigest);
 
         String str = bf.readLine();
-        byte[] convert = str.getBytes();
-        //String str2 = new String(convert, StandardCharsets.UTF_8);
         String str2 = "";
 
 
         //For human observer
         System.out.println("Client: Encrypted plain text - " +str);
 
-       Cipher cipherObject = Cipher.getInstance("DES");
-       KeyGenerator kg = KeyGenerator.getInstance("DES");
+       KeyGenerator kg = KeyGenerator.getInstance("DESede");
        SecretKey sk = kg.generateKey();
-
+       Cipher cipherObject = Cipher.getInstance("DESede/ECB/PKCS5Padding");
         byte[] receivedText = str2.getBytes();
         cipherObject.init(Cipher.DECRYPT_MODE, sk);
         byte[] decodedMessage = cipherObject.doFinal(receivedText);//main problem: can't decode str

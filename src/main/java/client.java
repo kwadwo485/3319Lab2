@@ -32,10 +32,10 @@ public class client {
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
 
         Mac sha256 = Mac.getInstance("HmacSHA256");
-        Cipher cipherObject = Cipher.getInstance("DES");
+        Cipher cipherObject = Cipher.getInstance("DESede/ECB/PKCS5Padding");
 
         SecretKeySpec sks = new SecretKeySpec(hmacKey.getBytes(),"HmacSHA256");
-        KeyGenerator kg = KeyGenerator.getInstance("DES");
+        KeyGenerator kg = KeyGenerator.getInstance("DESede");
         sha256.init(sks);
         SecretKey sk = kg.generateKey();
 
@@ -49,6 +49,7 @@ public class client {
 
         //for human observer
         System.out.println("Message: " +message);
+        System.out.println("DES key: " +sk.toString());
         System.out.println("HMAC Key: " +hmacKey);
         System.out.println("HMAC digest: " +hmacDigest);
         System.out.println("Cipher text:" + new String(encodedMessage));
