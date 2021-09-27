@@ -18,7 +18,12 @@ public class client {
         //PrintWriter pr2 = new PrintWriter(s.getOutputStream());
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter message to be encrypted: ");
-        String hmacKey = "admin";
+        File hmacKeyFile = new File("C:/Users/Kwadwo/Desktop/hmacKey.txt");
+        String hmacKey = "";
+        Scanner fileScanner = new Scanner(hmacKeyFile);
+        while(fileScanner.hasNext()){
+            hmacKey = fileScanner.next();
+        }
         String message = sc.nextLine();
         byte[] plainText = message.getBytes();
 
