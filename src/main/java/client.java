@@ -12,10 +12,10 @@ public class client {
     public static void main(String[] args) throws IOException, NoSuchAlgorithmException, InvalidKeyException,
             NoSuchPaddingException, IllegalBlockSizeException, BadPaddingException {
         Socket s = new Socket("localhost", 4999);
+        Socket s2 = new Socket("localhost", 1025);
 
         //client to server
         PrintWriter pr = new PrintWriter(s.getOutputStream());
-        //PrintWriter pr2 = new PrintWriter(s.getOutputStream());
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter message to be encrypted: ");
         File hmacKeyFile = new File("C:/Users/Kwadwo/Desktop/hmacKey.txt");
@@ -30,19 +30,23 @@ public class client {
         //UTF
         OutputStream outputStream = s.getOutputStream();
         DataOutputStream dataOutputStream = new DataOutputStream(outputStream);
+        OutputStream outputStream2 = s2.getOutputStream();
+        DataOutputStream dataOutputStream2 = new DataOutputStream(outputStream2);
 
         Mac sha256 = Mac.getInstance("HmacSHA256");
-        Cipher cipherObject = Cipher.getInstance("DESede/ECB/PKCS5Padding");
+        Cipher cipherObject = Cipher.getInstance("DES/ECB/PKCS5Padding");
 
         SecretKeySpec sks = new SecretKeySpec(hmacKey.getBytes(),"HmacSHA256");
-        KeyGenerator kg = KeyGenerator.getInstance("DESede");
+        KeyGenerator kg = KeyGenerator.getInstance("DES");
         sha256.init(sks);
         SecretKey sk = kg.generateKey();
 
         //using UTF for hmac digest
         String hmacDigest = encodeBase64String(sha256.doFinal(message.getBytes()));
         dataOutputStream.writeUTF(hmacDigest);
-        dataOutputStream.flush(); // send the message
+        dataOutputStream.flush(); // send the hmacDigest
+        dataOutputStream2.writeUTF(message);
+        dataOutputStream2.flush(); // send the message
 
         cipherObject.init(Cipher.ENCRYPT_MODE, sk);
         byte[] encodedMessage = cipherObject.doFinal(plainText);
@@ -67,5 +71,6 @@ public class client {
 
         //closing UTF
         dataOutputStream.close(); // close the output stream when we're done.
+        dataOutputStream2.close();
     }
 }
