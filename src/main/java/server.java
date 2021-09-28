@@ -44,7 +44,6 @@ public class server {
         InputStream inputStream2 = s2.getInputStream();
         DataInputStream dataInputStream2 = new DataInputStream(inputStream2);
         String originalMessage = dataInputStream2.readUTF();
-        System.out.println("Original message: " +originalMessage);
 
         //storing buffer reader ciphertext in str
         String str = bf.readLine();
